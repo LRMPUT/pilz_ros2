@@ -53,12 +53,13 @@ limitations under the License.
     </link>
 
     <!-- arm 1 joint -->
+    <!-- NOTE: velocity moderately elevated for simulation (mock_components). Real hardware: 1.57 rad/s -->
     <joint name="${prefix}joint_1" type="revolute">
       <origin xyz="0 0 ${L0}" rpy="0 0 -${pi}"/>
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 1"/>
-      <limit effort="370" velocity="1.57" lower="-2.96706" upper="2.96706"/>
+      <limit effort="370" velocity="5.0" lower="-2.96706" upper="2.96706"/>
       <dynamics damping="15.0" friction="11" />
     </joint>
 
@@ -104,7 +105,7 @@ limitations under the License.
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 0 1"/>
-      <limit effort="370" velocity="1.57" lower="-2.53073" upper="2.53073"/>
+      <limit effort="370" velocity="5.0" lower="-2.53073" upper="2.53073"/>
       <dynamics damping="12.0" friction="10.0" />
     </joint>
 
@@ -143,7 +144,7 @@ limitations under the License.
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 0 1"/>
-      <limit effort="176" velocity="1.57" lower="-2.35620" upper="2.35620"/>
+      <limit effort="176" velocity="5.0" lower="-2.35620" upper="2.35620"/>
       <dynamics damping="4.5" friction="4.5" />
     </joint>
 
@@ -187,7 +188,7 @@ limitations under the License.
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="0 0 1" />
-      <limit effort="176" velocity="1.57" lower="-2.96706" upper="2.96706"/>
+      <limit effort="176" velocity="5.0" lower="-2.96706" upper="2.96706"/>
       <dynamics damping="4.2" friction="3.8" />
     </joint>
 
@@ -226,7 +227,7 @@ limitations under the License.
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 0 1" />
-      <limit effort="41.6" velocity="1.57" lower="-2.96706" upper="2.96706" />
+      <limit effort="41.6" velocity="200.0" lower="-2.96706" upper="2.96706" />
       <dynamics damping="1.5" friction="3.5" />
     </joint>
 
@@ -282,7 +283,7 @@ limitations under the License.
       <parent link="${prefix}link_5"/>
       <child link="${prefix}flange"/>
       <axis xyz="0 0 1" />
-      <limit effort="20.1" velocity="1.57" lower="-3.12414" upper="3.12414" />
+      <limit effort="20.1" velocity="5.0" lower="-3.12414" upper="3.12414" />
       <dynamics damping="4.5" friction="7.0" />
     </joint>
 
@@ -309,7 +310,7 @@ limitations under the License.
       </collision>
     </link>
 
-    <!-- ROS-Industrial 'base' frame: base_link to robot world coordinate sytem transform -->
+    <!-- ROS-Industrial 'base' frame: base_link to robot world coordinate system transform -->
     <link name="${prefix}base" />
     <joint name="${prefix}base_link-base" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -325,130 +326,59 @@ limitations under the License.
       <child link="${prefix}tool0" />
     </joint>
 
-    <!-- transmissions for gazebo -->
-    <transmission name="${prefix}joint_1_trans">
-      <type>transmission_interface/SimpleTransmission</type>
+  </xacro:macro>
+
+  <!-- ros2_control macro for the manipulator -->
+  <xacro:macro name="prbt_ros2_control" params="prefix">
+    <ros2_control name="prbt_manipulator" type="system">
+      <hardware>
+        <plugin>mock_components/GenericSystem</plugin>
+      </hardware>
       <joint name="${prefix}joint_1">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
       </joint>
-      <actuator name="${prefix}joint_1_motor"/>
-    </transmission>
-    <transmission name="${prefix}joint_2_trans">
-      <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}joint_2">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
       </joint>
-      <actuator name="${prefix}joint_2_motor"/>
-    </transmission>
-    <transmission name="${prefix}joint_3_trans">
-      <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}joint_3">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
       </joint>
-      <actuator name="${prefix}joint_3_motor"/>
-    </transmission>
-    <transmission name="${prefix}joint_4_trans">
-      <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}joint_4">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
       </joint>
-      <actuator name="${prefix}joint_4_motor"/>
-    </transmission>
-    <transmission name="${prefix}joint_5_trans">
-      <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}joint_5">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
       </joint>
-      <actuator name="${prefix}joint_5_motor"/>
-    </transmission>
-    <transmission name="${prefix}joint_6_trans">
-      <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}joint_6">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
       </joint>
-      <actuator name="${prefix}joint_6_motor"/>
-    </transmission>
+    </ros2_control>
+  </xacro:macro>
 
-    <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" >
-        <robotNamespace>prbt</robotNamespace>
-        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-        <legacyModeNS>false</legacyModeNS> <!-- Only used from ros-kinetic-gazebo-ros-control 2.5.18 -->
-      </plugin>
-    </gazebo>
-
-    <gazebo reference="${prefix}joint_1">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-	<updateRate>100.0</updateRate>
-	<topicName>prbt/ft_sensor/joint_1</topicName>
-	<jointName>${prefix}joint_1</jointName>
-      </plugin>
-    </gazebo>
-
-    <gazebo reference="${prefix}joint_2">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-	<updateRate>100.0</updateRate>
-	<topicName>prbt/ft_sensor/joint_2</topicName>
-	<jointName>${prefix}joint_2</jointName>
-      </plugin>
-    </gazebo>
-
-    <gazebo reference="${prefix}joint_3">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-	<updateRate>100.0</updateRate>
-	<topicName>prbt/ft_sensor/joint_3</topicName>
-	<jointName>${prefix}joint_3</jointName>
-      </plugin>
-    </gazebo>
-
-    <gazebo reference="${prefix}joint_4">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-	<updateRate>100.0</updateRate>
-	<topicName>prbt/ft_sensor/joint_4</topicName>
-	<jointName>${prefix}joint_4</jointName>
-      </plugin>
-    </gazebo>
-
-    <gazebo reference="${prefix}joint_5">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-	<updateRate>100.0</updateRate>
-	<topicName>prbt/ft_sensor/joint_5</topicName>
-	<jointName>${prefix}joint_5</jointName>
-      </plugin>
-    </gazebo>
-
-    <gazebo reference="${prefix}joint_6">
-      <provideFeedback>true</provideFeedback>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
-	<updateRate>100.0</updateRate>
-	<topicName>prbt/ft_sensor/joint_6</topicName>
-	<jointName>${prefix}joint_6</jointName>
-      </plugin>
-    </gazebo>
-
+  <!-- ros2_control macro for the gripper -->
+  <xacro:macro name="prbt_gripper_ros2_control" params="prefix">
+    <ros2_control name="prbt_gripper" type="system">
+      <hardware>
+        <plugin>mock_components/GenericSystem</plugin>
+      </hardware>
+      <joint name="${prefix}gripper_finger_left_joint">
+        <command_interface name="position"/>
+        <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
   </xacro:macro>
 
 </robot>

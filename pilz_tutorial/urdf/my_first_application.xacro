@@ -35,6 +35,8 @@
   <!-- instantiate the robot -->
   <xacro:prbt prefix="prbt_"/>
 
+  <!-- instantiate ros2_control for manipulator -->
+  <xacro:prbt_ros2_control prefix="prbt_"/>
 
   <link name="world">
     <visual>
@@ -46,7 +48,7 @@
     </visual>
   </link>
 
-  
+
   <xacro:if value="${gripper != ''}">
     <link name="pnoz">
         <visual>
@@ -78,19 +80,17 @@
         </visual>
     </link>
   </xacro:if>
-      
+
 
   <joint name="table_joint" type="fixed">
     <parent link="world"/>
     <child link="prbt_base_link"/>
   </joint>
 
-  <joint name="pnoz_joint" type="prismatic">
+  <joint name="pnoz_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 -0.5 0.115"/>
     <parent link="prbt_base_link"/>
     <child link="pnoz"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="1000.0" lower="-1" upper="1" velocity="1"/>
   </joint>
 
   <!-- TCP -->
@@ -104,7 +104,7 @@
   <!-- If gripper given then... -->
   <xacro:if value="${gripper != ''}">
     <!-- name of the gripper -->
-    <xacro:property name="gripper_name" value="$(arg robot_prefix)gripper"/>  
+    <xacro:property name="gripper_name" value="$(arg robot_prefix)gripper"/>
 
     <!-- load gripper macro -->
     <xacro:include filename="$(find prbt_${gripper}_support)/urdf/${gripper}.urdf.xacro" />
@@ -112,13 +112,12 @@
     <!-- instantiate gripper -->
     <xacro:prbt_gripper parent="$(arg robot_prefix)flange" />
 
+    <!-- instantiate ros2_control for gripper -->
+    <xacro:prbt_gripper_ros2_control prefix="$(arg robot_prefix)"/>
+
     <!-- Add gripper brackets -->
     <xacro:include filename="$(find prbt_support)/urdf/simple_gripper_brackets.urdf.xacro" />
     <xacro:simple_gripper_brackets />
   </xacro:if>
-
-
-
-
 
 </robot>

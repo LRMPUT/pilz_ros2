@@ -1,5 +1,4 @@
-#
-# Copyright (c) 2019 Pilz GmbH & Co. KG
+# Copyright (c) 2018 Pilz GmbH & Co. KG
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -14,10 +13,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-builtin_interfaces/Time time_stamp
-int8 value
+"""API for easy usage of Pilz robot commands - ROS2 Jazzy version."""
 
-int8 T1 = 1
-int8 T2 = 2
-int8 AUTO = 3
-int8 UNKNOWN = 0
+from __future__ import absolute_import
+
+from .exceptions import *  # noqa: F401, F403
+from .commands import *    # noqa: F401, F403
+from .robot import *       # noqa: F401, F403

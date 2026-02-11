@@ -1,27 +1,20 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.8)
 project(pilz_msgs)
 
-find_package(catkin REQUIRED COMPONENTS
-  message_generation)
+find_package(ament_cmake REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 
-## Generate messages in the 'msg' folder
- add_message_files(
-   FILES
-   IsBrakeTestRequiredResult.msg
-   OperationModes.msg
- )
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/IsBrakeTestRequiredResult.msg"
+  "msg/OperationModes.msg"
+  "srv/BrakeTest.srv"
+  "srv/GetOperationMode.srv"
+  "srv/GetSpeedOverride.srv"
+  "srv/IsBrakeTestRequired.srv"
+  "srv/SetSpeedLimit.srv"
+  DEPENDENCIES std_msgs builtin_interfaces
+)
 
- #Generate services in the 'srv' folder
- add_service_files(
-   FILES
-   BrakeTest.srv
-   GetOperationMode.srv
-   GetSpeedOverride.srv
-   IsBrakeTestRequired.srv
-   SetSpeedLimit.srv
- )
-
-# Generate added messages and services with any dependencies listed here
-generate_messages()
-
-catkin_package(CATKIN_DEPENDS message_runtime)
+ament_package()

@@ -1,41 +1,31 @@
-<package format="2">
-
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>prbt_moveit_config</name>
   <version>0.6.0</version>
-  <description>
-     An automatically generated package with all the configuration and launch files for using the prbt with the MoveIt! Motion Planning Framework
-  </description>
+  <description>MoveIt2 configuration for the Pilz PRBT robot</description>
+  <maintainer email="ros-student@todo.todo">ros-student</maintainer>
+  <license>Apache-2.0</license>
 
-  <maintainer email="i.martini@pilz.de">Immanuel Martini</maintainer>
-
-  <license>Apache 2.0</license>
-
-  <url type="website">https://wiki.ros.org/prbt_moveit_config</url>
-  <url type="bugtracker">https://github.com/PilzDE/pilz_robots/issues</url>
-  <url type="repository">https://github.com/PilzDE/pilz_robots</url>
-
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>moveit_ros_move_group</exec_depend>
   <exec_depend>moveit_kinematics</exec_depend>
   <exec_depend>moveit_planners_ompl</exec_depend>
   <exec_depend>moveit_ros_visualization</exec_depend>
-  <exec_depend>moveit_fake_controller_manager</exec_depend>
   <exec_depend>moveit_simple_controller_manager</exec_depend>
+  <exec_depend>pilz_industrial_motion_planner</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>joint_state_broadcaster</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>xacro</exec_depend>
-  <exec_depend>rviz</exec_depend>
- <!-- <exec_depend>prbt_support</exec_depend>
-  <exec_depend>prbt_ikfast_manipulator_plugin</exec_depend>
-  <exec_depend>prbt_hardware_support</exec_depend> -->
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>prbt_support</exec_depend>
+  <exec_depend>prbt_pg70_support</exec_depend>
 
-  <test_depend>roslaunch</test_depend>
-  <test_depend>moveit_core</test_depend>
-  <test_depend>moveit_ros_planning</test_depend>
-  <test_depend>pluginlib</test_depend>
-  <test_depend>roscpp</test_depend>
-  <test_depend>rostest</test_depend>
-  <test_depend>rosunit</test_depend>
-
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

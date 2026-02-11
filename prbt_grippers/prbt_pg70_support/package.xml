@@ -1,26 +1,19 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>prbt_pg70_support</name>
-  <version>0.0.5</version>
-  <description>PRBT support for Schunk pg70 gripper.</description>
+  <version>0.6.0</version>
+  <description>Support package for the Schunk PG70 gripper on the Pilz PRBT robot</description>
+  <maintainer email="ros-student@todo.todo">ros-student</maintainer>
+  <license>Apache-2.0</license>
 
-  <maintainer email="i.martini@pilz.de">Immanuel Martini</maintainer>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <license>Apache 2.0</license>
-
-  <url type="website">https://wiki.ros.org/prbt_pg70_support</url>
-  <url type="bugtracker">https://github.com/PilzDE/prbt_grippers/issues</url>
-  <url type="repository">https://github.com/PilzDE/prbt_grippers</url>
-
-  <buildtool_depend>catkin</buildtool_depend>
-
-  <exec_depend>prbt_support</exec_depend>
-  <exec_depend>prbt_ikfast_manipulator_plugin</exec_depend>
-  <exec_depend>prbt_moveit_config</exec_depend>
-
-  <exec_depend>schunk_description</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <exec_depend>schunk_description</exec_depend>
+  <exec_depend>prbt_support</exec_depend>
 
-
-
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>

@@ -63,7 +63,33 @@ limitations under the License.
     <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}gripper_palm_link" reason="Never" />
     <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}link_5" reason="Never" />
     <disable_collisions link1="${prefix}gripper_palm_link" link2="${prefix}link_2" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_palm_link" link2="${prefix}link_3" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_palm_link" link2="${prefix}link_4" reason="Never" />
     <disable_collisions link1="${prefix}gripper_palm_link" link2="${prefix}link_5" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link" link2="${prefix}link_3" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link" link2="${prefix}link_4" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link_bracket" link2="${prefix}link_3" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link_bracket" link2="${prefix}link_4" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link" link2="${prefix}link_3" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link" link2="${prefix}link_4" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}link_3" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}link_4" reason="Never" />
+
+    <!-- gripper vs link_1, link_2, base_link - physically unreachable -->
+    <disable_collisions link1="${prefix}gripper_palm_link" link2="${prefix}link_1" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_palm_link" link2="${prefix}base_link" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link" link2="${prefix}link_1" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link" link2="${prefix}link_2" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link" link2="${prefix}base_link" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link" link2="${prefix}link_1" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link" link2="${prefix}link_2" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link" link2="${prefix}base_link" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link_bracket" link2="${prefix}link_1" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link_bracket" link2="${prefix}link_2" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_left_link_bracket" link2="${prefix}base_link" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}link_1" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}link_2" reason="Never" />
+    <disable_collisions link1="${prefix}gripper_finger_right_link_bracket" link2="${prefix}base_link" reason="Never" />
   </xacro:macro>
 
   <!-- instantiate gripper -->

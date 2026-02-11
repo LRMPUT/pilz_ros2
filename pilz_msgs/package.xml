@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>pilz_msgs</name>
-  <version>0.7.2</version>
-  <description>The pilz_msgs package</description>
+  <version>0.5.0</version>
+  <description>Message and service definitions for Pilz robots</description>
+  <maintainer email="ros-student@todo.todo">ros-student</maintainer>
+  <license>LGPL-3.0-only</license>
 
-  <maintainer email="c.doehn@pilz.de">Christian Doehn</maintainer>
-  <maintainer email="i.martini@pilz.de">Immanuel Martini</maintainer>
-  <maintainer email="r.feistenauer@pilz.de">Richard Feistenauer</maintainer>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
 
-  <license>Apache 2.0</license>
+  <depend>std_msgs</depend>
+  <depend>builtin_interfaces</depend>
 
-  <url type="website">https://wiki.ros.org/pilz_msgs</url>
-  <url type="bugtracker">https://github.com/PilzDE/pilz_common/issues</url>
-  <url type="repository">https://github.com/PilzDE/pilz_common</url>
+  <exec_depend>rosidl_default_runtime</exec_depend>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <member_of_group>rosidl_interface_packages</member_of_group>
 
-  <build_depend>message_generation</build_depend>
-
-  <run_depend>message_runtime</run_depend>
-
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
 </package>
