@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <name>pilz_msgs</name>
+  <version>0.7.2</version>
+  <description>The pilz_msgs package</description>
+
+  <maintainer email="c.doehn@pilz.de">Christian Doehn</maintainer>
+  <maintainer email="i.martini@pilz.de">Immanuel Martini</maintainer>
+  <maintainer email="r.feistenauer@pilz.de">Richard Feistenauer</maintainer>
+
+  <license>Apache 2.0</license>
+
+  <url type="website">https://wiki.ros.org/pilz_msgs</url>
+  <url type="bugtracker">https://github.com/PilzDE/pilz_common/issues</url>
+  <url type="repository">https://github.com/PilzDE/pilz_common</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>message_generation</build_depend>
+
+  <run_depend>message_runtime</run_depend>
+
+</package>

@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+
+<robot name="prbt" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Definition of robot name -->
+  <xacro:arg name="robot_prefix" default="prbt_"/>
+
+  <!-- macro definition of pilz lwa -->
+  <xacro:include filename="$(find prbt_support)/urdf/prbt_macro.xacro" />
+
+  <!-- gripper -->
+  <xacro:arg name="gripper" default=""/>
+  <xacro:property name="gripper" value="$(arg gripper)"/>
+
+  <!-- TCP Offset -->
+  <xacro:if value="${not gripper}">
+    <xacro:arg name="tcp_offset_xyz" default="0 0 0"/>
+    <xacro:arg name="tcp_offset_rpy" default="0 0 0"/>
+  </xacro:if>
+
+  <xacro:if value="${gripper != ''}">
+    <xacro:include filename="$(find prbt_${gripper}_support)/config/${gripper}_tcp_offset.xacro" />
+  </xacro:if>
+
+  <!-- coloring from the stl file -->
+  <material name="yellow">
+    <color rgba="1 1 0 1"/>
+  </material>
+
+  <!-- coloring from the table -->
+  <material name="grey">
+    <color rgba="0.75 0.75 0.75 1"/>
+  </material>
+
+  <!-- instantiate the robot -->
+  <xacro:prbt prefix="prbt_"/>
+
+
+  <link name="world">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.03"/>
+      <geometry>
+        <box size="0.6 1.2 0.05"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+
+  
+  <xacro:if value="${gripper != ''}">
+    <link name="pnoz">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+            <mesh filename="package://pilz_tutorial/urdf/meshes/pnoz_assembly.stl"
+            scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="yellow"/>
+        </visual>
+        <collision>
+        <origin rpy="0 0 0" xyz="0 0 -0.1"/>
+        <geometry>
+            <box size="0.01 0.01 0.01" />
+        </geometry>
+        </collision>
+
+    </link>
+  </xacro:if>
+  <xacro:if value="${gripper == ''}">
+    <link name="pnoz">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+            <mesh filename="package://pilz_tutorial/urdf/meshes/pnoz_assembly.stl"
+            scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="yellow"/>
+        </visual>
+    </link>
+  </xacro:if>
+      
+
+  <joint name="table_joint" type="fixed">
+    <parent link="world"/>
+    <child link="prbt_base_link"/>
+  </joint>
+
+  <joint name="pnoz_joint" type="prismatic">
+    <origin rpy="0 0 0" xyz="0 -0.5 0.115"/>
+    <parent link="prbt_base_link"/>
+    <child link="pnoz"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-1" upper="1" velocity="1"/>
+  </joint>
+
+  <!-- TCP -->
+  <joint name="$(arg robot_prefix)fixed_joint_tcp" type="fixed">
+    <origin xyz="$(arg tcp_offset_xyz)" rpy="$(arg tcp_offset_rpy)" />
+    <parent link="$(arg robot_prefix)flange"/>
+    <child link="$(arg robot_prefix)tcp"/>
+  </joint>
+  <link name="$(arg robot_prefix)tcp" />
+
+  <!-- If gripper given then... -->
+  <xacro:if value="${gripper != ''}">
+    <!-- name of the gripper -->
+    <xacro:property name="gripper_name" value="$(arg robot_prefix)gripper"/>  
+
+    <!-- load gripper macro -->
+    <xacro:include filename="$(find prbt_${gripper}_support)/urdf/${gripper}.urdf.xacro" />
+
+    <!-- instantiate gripper -->
+    <xacro:prbt_gripper parent="$(arg robot_prefix)flange" />
+
+    <!-- Add gripper brackets -->
+    <xacro:include filename="$(find prbt_support)/urdf/simple_gripper_brackets.urdf.xacro" />
+    <xacro:simple_gripper_brackets />
+  </xacro:if>
+
+
+
+
+
+</robot>

@@ -1,0 +1,7 @@
+*.autosave
+*.swp
+*.pyc
+.idea/
+*.bag
+*/doc/html
+*/doc/manifest.yaml
