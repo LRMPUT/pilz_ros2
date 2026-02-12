@@ -7,16 +7,15 @@ Usage:
 """
 from geometry_msgs.msg import Pose, Point, Quaternion
 from pilz_robot_programming import *
-import math
+from math import pi # type: ignore
 import rclpy
 __REQUIRED_API_VERSION__ = "1"  # API version
 __ROBOT_VELOCITY__ = 0.5        # velocity of the robot
 
-from math import pi as pi
 
 # ======== lab5 =========
 
-def start_program(r):
+def start_program(r: Robot):
     print(r.get_current_pose())
     print(r.get_current_joint_states())
     joint_goal = [-1.55, 0.5922, -1.11473, 0.01071, -1.42431, -0.228]
@@ -27,7 +26,7 @@ def start_program(r):
     r.move(Lin(goal=cartesian_goal, vel_scale=0.1, acc_scale=0.1))
 
 
-def start_program_circ(r):
+def start_program_circ(r: Robot):
     print(r.get_current_pose())
     print(r.get_current_joint_states())
     joint_goal = [-1.55, 0.5922, -1.11473, 0.01071, -1.42431, -0.228]
@@ -46,7 +45,7 @@ def start_program_circ(r):
     r.move(Circ(goal=end_goal, interim=interim_point, vel_scale=0.1, acc_scale=0.1))
 
 
-def circ_v1(r):
+def circ_v1(r: Robot):
     print('1/4 okregu z wykorzystaniem punktu center')
     print(r.get_current_pose())
     print(r.get_current_joint_states())
@@ -64,7 +63,7 @@ def circ_v1(r):
                 center=Point(x=0.0, y=-0.5, z=0.08), acc_scale=0.1))
 
 
-def circ_v2(r):
+def circ_v2(r: Robot):
     print('1/2 okregu z wykorzystaniem punktu interim')
     print(r.get_current_pose())
     print(r.get_current_joint_states())
@@ -84,15 +83,15 @@ def circ_v2(r):
 
 # ======= lab 6 =========
 
-def start_gripper(r):
+def start_gripper(r: Robot):
     r.move(Gripper(goal=0.02, vel_scale=0.03))
 
 
 
-def task1(r):
-    pose1 = Pose(position=Point(x=0.0, y=-0.25, z=0.5), orientation=from_euler(0, math.pi, math.pi/2.0))
-    pose2 = Pose(position=Point(x=0.0, y=0.0, z=0.25), orientation=from_euler(0, math.pi, 0))
-    pose3 = Pose(position=Point(x=0.0, y=0.0, z=0.0), orientation=from_euler(0, math.pi, 0))
+def task1(r: Robot):
+    pose1 = Pose(position=Point(x=0.0, y=-0.25, z=0.5), orientation=from_euler(0, pi, pi/2.0))
+    pose2 = Pose(position=Point(x=0.0, y=0.0, z=0.25), orientation=from_euler(0, pi, 0))
+    pose3 = Pose(position=Point(x=0.0, y=0.0, z=0.0), orientation=from_euler(0, pi, 0))
 
     r.move(Ptp(goal=pose1, vel_scale=0.4, reference_frame="prbt_base_link"))
     r.move(Ptp(goal=pose2, vel_scale=0.4, reference_frame="pnoz"))
@@ -100,7 +99,7 @@ def task1(r):
     r.move(Lin(goal=pose3, vel_scale=0.15, reference_frame="pnoz"))
     r.move(Gripper(goal=0.02, vel_scale=0.2))
 
-def task2(r):
+def task2(r: Robot):
     pose6 = Pose(position=Point(x=0.0, y=0.0, z=-0.25), orientation=from_euler(0, 0, 0))
     pose7 = Pose(position=Point(x=0.0, y=0.1, z=0.0), orientation=from_euler(pi/2.0, -pi/3.0, 0))
     pose8 = Pose(position=Point(x=0.0, y=-0.1, z=0.0), orientation=from_euler(0, 0, 0))
@@ -111,7 +110,7 @@ def task2(r):
     r.move(Ptp(goal=pose8, vel_scale=0.3, reference_frame="prbt_tcp"))
     r.move(Lin(goal=pose9, vel_scale=0.1, reference_frame="prbt_tcp"))
 
-def task3(r):
+def task3(r: Robot):
     pose10 = Pose(position=Point(x=0.0, y=0.0, z=-0.1), orientation=from_euler(0, 0, 0))
     pose11 = Pose(position=Point(x=-0.1, y=0.0, z=-0.1), orientation=from_euler(0, 0, 0))
 
@@ -121,7 +120,7 @@ def task3(r):
 
     r.move(sequence)
 
-def okrag(r):
+def okrag(r: Robot):
     radius = 0.08
     pose1 = Pose(position=Point(x=0.0, y=-0.25, z=0.5), orientation=from_euler(0, pi, pi/2.0))
     pose2 = Pose(position=Point(x=0.0, y=radius, z=0.25), orientation=from_euler(0, pi, 0))
@@ -160,12 +159,12 @@ if __name__ == "__main__":
     # initialisation
     r = Robot(__REQUIRED_API_VERSION__)  # instance of the robot
 
-    start_program(r)
-    start_gripper(r)
+    # start_program(r)
+    # start_gripper(r)
     task1(r)
-    task2(r)
-    task3(r)
-    okrag(r)
+    # task2(r)
+    # task3(r)
+    # okrag(r)
 
     r.shutdown()
     rclpy.shutdown()

@@ -7,7 +7,7 @@ Usage:
 """
 from geometry_msgs.msg import Pose, Point, Quaternion
 from pilz_robot_programming import *
-import math
+from math import pi # type: ignore
 import rclpy
 __REQUIRED_API_VERSION__ = "1"  # API version
 __ROBOT_VELOCITY__ = 0.5        # velocity of the robot
