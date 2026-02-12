@@ -24,7 +24,8 @@
   <exec_depend>tf_transformations</exec_depend>
   <exec_depend>pilz_msgs</exec_depend>
   <exec_depend>pilz_industrial_motion_planner</exec_depend>
-  <exec_depend>python3-psutil</exec_depend>
+
+  <depend>python3-psutil</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

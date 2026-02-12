@@ -46,12 +46,27 @@ sudo apt install -y software-properties-common curl
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 sudo apt update
-sudo apt install -y ros-jazzy-desktop
+sudo apt install -y ros-jazzy-desktop-full
 ```
 
 ### 2. Install all dependencies
 
 ```bash
+# install basic apt packages
+sudo apt install -y python3-colcon-common-extensions python3-rosdep python3-psutil python3-pip
+
+# clone the repository
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+git clone -b jazzy https://github.com/LRMPUT/pilz_ros2.git src/pilz_ros2
+
+# install dependencies with rosdep
+sudo rosdep init 2>/dev/null || true
+rosdep update
+rosdep install --from-paths src -y --ignore-src
+```
+
+<!-- ```bash
 sudo apt install -y \
   python3-colcon-common-extensions \
   python3-rosdep \
@@ -95,21 +110,21 @@ sudo apt install -y \
   ros-jazzy-action-msgs \
   ros-jazzy-launch \
   ros-jazzy-launch-ros
-```
+``` -->
 
-### 3. Initialize rosdep (if not done yet)
+<!-- ### 3. Initialize rosdep (if not done yet)
 
 ```bash
 sudo rosdep init 2>/dev/null || true
 rosdep update
-```
+``` -->
 
 ## Building the Workspace
 
 ```bash
-cd ~/Desktop/pilz_ws
+cd ~/ros2_ws
 source /opt/ros/jazzy/setup.bash
-colcon build
+colcon build --symlink-install
 source install/setup.bash
 ```
 
