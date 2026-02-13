@@ -490,7 +490,7 @@ pilz_ws/
       launch/
         my_application.launch.py  #   Main launch file
       scripts/
-        taskBK.py                 #   Example program with all command types
+        testRobot.py              #   Example simple program
     prbt_support/                 # PRBT robot description (URDF/xacro, meshes)
     prbt_moveit_config/           # MoveIt2 configuration (SRDF, kinematics, limits, controllers)
     prbt_grippers/                # Gripper support packages
