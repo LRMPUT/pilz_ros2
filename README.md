@@ -155,7 +155,7 @@ ros2 launch pilz_tutorial my_application.launch.py gripper:=pg70
 
 ```bash
 # Terminal 2: Run your robot program
-ros2 run pilz_tutorial taskBK.py
+ros2 run pilz_tutorial testRobot.py
 ```
 
 ---

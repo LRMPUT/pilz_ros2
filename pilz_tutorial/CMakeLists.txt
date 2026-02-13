@@ -9,8 +9,7 @@ install(DIRECTORY launch urdf scripts
 
 # Install Python scripts as executables
 install(PROGRAMS
-  scripts/taskBK.py
-  scripts/testApp.py
+  scripts/testRobot.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
