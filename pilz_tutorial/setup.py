@@ -28,6 +28,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            # SYNTAX: 'node_name = pkg_name.file_name:function_name',
             'example_node = pilz_tutorial.example:main',
             # ADD YOUR NODE HERE, e.g. 'imie_node = pilz_tutorial.ImieApp:main',
         ],

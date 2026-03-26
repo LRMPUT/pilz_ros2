@@ -7,7 +7,6 @@ __REQUIRED_API_VERSION__ = "1"  # API version
 __ROBOT_VELOCITY__ = 0.5        # velocity of the robot
 
 
-# main program
 def start_program(robot: Robot):
     print(robot.get_current_pose())  # print the current position of the robot in the terminal
 
