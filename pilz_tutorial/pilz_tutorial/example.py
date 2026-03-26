@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Usage:
-  ros2 run pilz_tutorial testApp.py
-"""
 from geometry_msgs.msg import Pose, Point, Quaternion
 from pilz_robot_programming import *
 from math import pi # type: ignore
@@ -12,19 +8,23 @@ __ROBOT_VELOCITY__ = 0.5        # velocity of the robot
 
 
 # main program
-def start_program(r: Robot):
-    print(r.get_current_pose())  # print the current position of the robot in the terminal
+def start_program(robot: Robot):
+    print(robot.get_current_pose())  # print the current position of the robot in the terminal
 
 
-if __name__ == "__main__":
+def main():
     # init ROS2
     rclpy.init()
 
     # initialization
-    r = Robot(__REQUIRED_API_VERSION__)  # instance of the robot
+    robot = Robot(__REQUIRED_API_VERSION__)  # instance of the robot
 
     # start the main program
-    start_program(r)
+    start_program(robot)
 
-    r.shutdown()
+    robot.shutdown()
     rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()
