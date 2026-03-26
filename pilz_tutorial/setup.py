@@ -29,7 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'example_node = pilz_tutorial.example:main',
-            'bk_node = pilz_tutorial.taskBK:main'
+            # ADD YOUR NODE HERE, e.g. 'imie_node = pilz_tutorial.ImieApp:main',
         ],
     },
 )
