@@ -155,7 +155,7 @@ ros2 launch pilz_tutorial my_application.launch.py gripper:=pg70
 
 ```bash
 # Terminal 2: Run your robot program
-ros2 run pilz_tutorial testRobot.py
+ros2 run pilz_tutorial example_node
 ```
 
 ---
@@ -179,7 +179,7 @@ import rclpy
 from pilz_robot_programming import *
 
 rclpy.init()
-r = Robot("1")  # API version string
+robot = Robot("1")  # API version string
 ```
 
 **Constructor:**
@@ -207,19 +207,21 @@ The trajectory is planned in joint space - the path is not necessarily a straigh
 
 ```python
 # Joint space goal (6 joint values in radians)
-r.move(Ptp(goal=[0, 0.5, 0.5, 0, 0, 0], vel_scale=0.4))
+robot.move(Ptp(goal=[0.0, 0.5, 0.5, 0.0, 0.0, 0.0], vel_scale=0.4))
 
 # Cartesian goal
 from geometry_msgs.msg import Pose, Point, Quaternion
-r.move(Ptp(goal=Pose(position=Point(x=0.6, y=-0.3, z=0.2),
-                      orientation=from_euler(0, math.pi, 0)),
-           vel_scale=0.4))
+robot.move(Ptp(goal=Pose(position=Point(x=0.6, y=-0.3, z=0.2),
+                          orientation=from_euler(0, math.pi, 0)),
+               vel_scale=0.4))
 
-# With reference frame
-r.move(Ptp(goal=pose, vel_scale=0.3, reference_frame="pnoz"))
+# With reference frame (goal expressed in the "pnoz" frame)
+robot.move(Ptp(goal=Pose(position=Point(x=0.0, y=0.0, z=0.1),
+                          orientation=from_euler(0, math.pi, 0)),
+               vel_scale=0.3, reference_frame="pnoz"))
 
 # Relative motion
-r.move(Ptp(goal=Pose(position=Point(x=0.1, y=0, z=0)), vel_scale=0.2, relative=True))
+robot.move(Ptp(goal=Pose(position=Point(x=0.1, y=0.0, z=0.0)), vel_scale=0.2, relative=True))
 ```
 
 **Parameters:**
@@ -237,12 +239,12 @@ r.move(Ptp(goal=Pose(position=Point(x=0.1, y=0, z=0)), vel_scale=0.2, relative=T
 Linear motion. The robot TCP moves along a straight line in Cartesian space.
 
 ```python
-r.move(Lin(goal=Pose(position=Point(x=0.2, y=0.0, z=0.8),
-                      orientation=from_euler(0, math.pi, 0)),
-           vel_scale=0.1, acc_scale=0.1))
+robot.move(Lin(goal=Pose(position=Point(x=0.2, y=0.0, z=0.8),
+                          orientation=from_euler(0, math.pi, 0)),
+               vel_scale=0.1, acc_scale=0.1))
 
 # Relative linear motion
-r.move(Lin(goal=Pose(position=Point(x=0, y=0, z=-0.1)), vel_scale=0.05, relative=True))
+robot.move(Lin(goal=Pose(position=Point(x=0.0, y=0.0, z=-0.1)), vel_scale=0.05, relative=True))
 ```
 
 **Parameters:**
@@ -262,14 +264,14 @@ The arc is defined by the current position, a via-point (`interim` or `center`),
 
 ```python
 # Using interim point (point on the arc)
-r.move(Circ(goal=Pose(position=Point(x=0.0, y=-0.6, z=0.08)),
-            interim=Point(x=0.11, y=-0.49, z=0.08),
-            vel_scale=0.1, acc_scale=0.1))
+robot.move(Circ(goal=Pose(position=Point(x=0.0, y=-0.6, z=0.08)),
+                interim=Point(x=0.11, y=-0.49, z=0.08),
+                vel_scale=0.1, acc_scale=0.1))
 
 # Using center point (center of the circle)
-r.move(Circ(goal=Pose(position=Point(x=0.12, y=-0.5, z=0.08)),
-            center=Point(x=0.0, y=-0.5, z=0.08),
-            vel_scale=0.1, acc_scale=0.1))
+robot.move(Circ(goal=Pose(position=Point(x=0.12, y=-0.5, z=0.08)),
+                center=Point(x=0.0, y=-0.5, z=0.08),
+                vel_scale=0.1, acc_scale=0.1))
 ```
 
 **Parameters:**
@@ -291,21 +293,30 @@ Concatenates multiple motion commands into a single trajectory that is planned a
 If planning of any command in the sequence fails, none of them are executed.
 
 ```python
+pose1 = Pose(position=Point(x=0.2, y=-0.2, z=0.5), orientation=from_euler(0, math.pi, 0))
+pose2 = Pose(position=Point(x=0.2, y=0.2, z=0.5), orientation=from_euler(0, math.pi, 0))
+
 sequence = Sequence()
 sequence.append(Lin(goal=pose1, vel_scale=0.05, reference_frame="prbt_tcp"), blend_radius=0.01)
 sequence.append(Lin(goal=pose2, vel_scale=0.05, reference_frame="prbt_tcp"))
-r.move(sequence)
+robot.move(sequence)
 ```
 
 Blending connects consecutive motions smoothly. The last command in a sequence must have `blend_radius=0` (the default).
 
 ```python
+pose1 = Pose(position=Point(x=0.2, y=-0.2, z=0.5), orientation=from_euler(0, math.pi, 0))
+pose2 = Pose(position=Point(x=0.2, y=0.0, z=0.5), orientation=from_euler(0, math.pi, 0))
+pose3 = Pose(position=Point(x=0.2, y=0.2, z=0.5), orientation=from_euler(0, math.pi, 0))
+pose4 = Pose(position=Point(x=0.3, y=0.2, z=0.5), orientation=from_euler(0, math.pi, 0))
+inter = Point(x=0.25, y=0.1, z=0.5)
+
 sequence = Sequence()
 sequence.append(Ptp(goal=pose1, vel_scale=0.3))
 sequence.append(Lin(goal=pose2, vel_scale=0.1), blend_radius=0.1)
 sequence.append(Circ(goal=pose3, interim=inter, vel_scale=0.05), blend_radius=0.01)
 sequence.append(Ptp(goal=pose4, vel_scale=0.3))  # last item, blend_radius=0
-r.move(sequence)
+robot.move(sequence)
 ```
 
 ### Gripper
@@ -314,10 +325,10 @@ Controls the Schunk PG70 gripper. Sends goals directly to `gripper_trajectory_co
 
 ```python
 # Open gripper (half-width 0.03m = fully open for PG70)
-r.move(Gripper(goal=0.03, vel_scale=0.2))
+robot.move(Gripper(goal=0.03, vel_scale=0.2))
 
 # Close gripper (half-width 0.02m)
-r.move(Gripper(goal=0.02, vel_scale=0.2))
+robot.move(Gripper(goal=0.02, vel_scale=0.2))
 ```
 
 **Parameters:**
@@ -354,11 +365,13 @@ You can specify any valid TF frame using the `reference_frame` parameter:
 
 ```python
 # Goal in the "pnoz" frame (e.g. a fixture on the table)
-r.move(Ptp(goal=pose, vel_scale=0.4, reference_frame="pnoz"))
+robot.move(Ptp(goal=Pose(position=Point(x=0.0, y=0.0, z=0.1),
+                          orientation=from_euler(0, math.pi, 0)),
+               vel_scale=0.4, reference_frame="pnoz"))
 
 # Goal relative to the current TCP
-r.move(Lin(goal=Pose(position=Point(x=0, y=0, z=-0.1)),
-           vel_scale=0.1, reference_frame="prbt_tcp"))
+robot.move(Lin(goal=Pose(position=Point(x=0.0, y=0.0, z=-0.1)),
+               vel_scale=0.1, reference_frame="prbt_tcp"))
 ```
 
 Common frames for PRBT:
@@ -374,12 +387,12 @@ Position offsets are added directly. Orientation offsets are added as Euler angl
 
 ```python
 # Move 10cm down from current position
-r.move(Lin(goal=Pose(position=Point(x=0, y=0, z=-0.1)),
-           vel_scale=0.1, relative=True))
+robot.move(Lin(goal=Pose(position=Point(x=0.0, y=0.0, z=-0.1)),
+               vel_scale=0.1, relative=True))
 
 # Relative in a specific reference frame
-r.move(Ptp(goal=Pose(position=Point(x=0, y=0.1, z=0)),
-           vel_scale=0.3, reference_frame="prbt_tcp"))
+robot.move(Ptp(goal=Pose(position=Point(x=0.0, y=0.1, z=0.0)),
+               vel_scale=0.3, reference_frame="prbt_tcp"))
 ```
 
 ## Motion Control
@@ -400,9 +413,9 @@ ros2 service call /stop_movement std_srvs/srv/Trigger
 Or from Python in a separate thread:
 
 ```python
-r.pause()
-r.resume()
-r.stop()
+robot.pause()
+robot.resume()
+robot.stop()
 ```
 
 ---
@@ -418,37 +431,37 @@ import rclpy
 
 def main():
     rclpy.init()
-    r = Robot("1")
+    robot = Robot("1")
 
     # Print current state
-    print(r.get_current_pose())
-    print(r.get_current_joint_states())
+    print(robot.get_current_pose())
+    print(robot.get_current_joint_states())
 
     # Move to joint configuration
-    r.move(Ptp(goal=[0, 0.5, 0.5, 0, 0, 0], vel_scale=0.4))
+    robot.move(Ptp(goal=[0.0, 0.5, 0.5, 0.0, 0.0, 0.0], vel_scale=0.4))
 
     # Linear move to Cartesian pose
-    r.move(Lin(goal=Pose(position=Point(x=0.2, y=0.0, z=0.65),
-                          orientation=from_euler(0, math.pi, 0)),
-               vel_scale=0.1, acc_scale=0.1))
+    robot.move(Lin(goal=Pose(position=Point(x=0.2, y=0.0, z=0.65),
+                              orientation=from_euler(0, math.pi, 0)),
+                   vel_scale=0.1, acc_scale=0.1))
 
     # Open gripper
-    r.move(Gripper(goal=0.03, vel_scale=0.2))
+    robot.move(Gripper(goal=0.03, vel_scale=0.2))
 
     # Circular motion using interim point
-    r.move(Circ(goal=Pose(position=Point(x=0.0, y=-0.6, z=0.08)),
-                interim=Point(x=0.11, y=-0.49, z=0.08),
-                vel_scale=0.1, acc_scale=0.1))
+    robot.move(Circ(goal=Pose(position=Point(x=0.0, y=-0.6, z=0.08)),
+                    interim=Point(x=0.11, y=-0.49, z=0.08),
+                    vel_scale=0.1, acc_scale=0.1))
 
     # Sequence with blending
     seq = Sequence()
-    seq.append(Lin(goal=Pose(position=Point(x=0, y=0, z=-0.1)),
+    seq.append(Lin(goal=Pose(position=Point(x=0.0, y=0.0, z=-0.1)),
                    vel_scale=0.05, reference_frame="prbt_tcp"), blend_radius=0.01)
-    seq.append(Lin(goal=Pose(position=Point(x=-0.1, y=0, z=-0.1)),
+    seq.append(Lin(goal=Pose(position=Point(x=-0.1, y=0.0, z=-0.1)),
                    vel_scale=0.05, reference_frame="prbt_tcp"))
-    r.move(seq)
+    robot.move(seq)
 
-    r.shutdown()
+    robot.shutdown()
     rclpy.shutdown()
 
 if __name__ == "__main__":
@@ -489,8 +502,9 @@ pilz_ws/
     pilz_tutorial/                # Example programs and launch files
       launch/
         my_application.launch.py  #   Main launch file
-      scripts/
-        testRobot.py              #   Example simple program
+      pilz_tutorial/              #   Python module (ament_python package)
+        example.py                #   Example program (node: example_node)
+      setup.py                    #   Declares console_scripts (e.g. example_node)
     prbt_support/                 # PRBT robot description (URDF/xacro, meshes)
     prbt_moveit_config/           # MoveIt2 configuration (SRDF, kinematics, limits, controllers)
     prbt_grippers/                # Gripper support packages
